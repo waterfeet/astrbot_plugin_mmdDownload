@@ -8,6 +8,7 @@ from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
 from astrbot.api.message_components import File, Plain
+from astrbot.core.utils.astrbot_path import get_astrbot_plugin_path
 
 from .core.api_client import ApiClient
 import zipfile
@@ -72,8 +73,9 @@ class WaterFeetIwaraPlugin(Star):
 
     def encrypt_zip_7z(self, src_path: str, password: str) -> str:
         zip_path = os.path.splitext(src_path)[0] + ".zip"
+        _7zpath = f"{get_astrbot_plugin_path()}/astrbot_plugin_MMDDownload/core/7z.exe"
         subprocess.run([
-            "7z", "a", "-tzip", zip_path, src_path,
+            _7zpath, "a", "-tzip", zip_path, src_path,
             f"-p{password}", "-mem=AES256", "-y"
         ], check=True)
         return zip_path
