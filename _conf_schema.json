@@ -1,0 +1,20 @@
+{
+  "Iwara_account": {
+    "description": "Iwara 账号",
+    "type": "string",
+    "default": "",
+    "hint": "Iwara 账号"
+  },
+  "Iwara_password": {
+    "description": "Iwara 密码",
+    "type": "string",
+    "default": "",
+    "hint": "Iwara 密码"
+  },
+  "Iwara_savepath": {
+    "description": "文件保存路径",
+    "type": "string",
+    "default": "",
+    "hint": "文件保存路径"
+  }
+}
