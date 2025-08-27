@@ -175,6 +175,7 @@ class ApiClient:
 
         url = video['fileUrl']
         file_id = video['file']['id']
+        file_size = video['file']['size']
         expires = url.split('/')[4].split('?')[1].split('&')[0].split('=')[1]
         SHA_key = file_id + "_" + expires + "_5nFp9kmbNnHdAFhaqMvt"
         hash = hashlib.sha1(SHA_key.encode('utf-8')).hexdigest()
@@ -202,12 +203,16 @@ class ApiClient:
             resume_byte = os.path.getsize(full_path)
             # 如果文件已完整，直接返回
             try:
-                total_size = int(self.scraper.head(download_link).headers.get("Content-Length", 0))
-                if resume_byte == total_size and total_size > 0:
+                total_size = file_size
+                if resume_byte >= total_size and total_size > 0:
                     print(f"Video {video_id} 已存在，跳过下载")
                     return full_path
+                else:
+                    raise RuntimeError(f"Video {video_id} 下载中，跳过下载") # 重新下载
+
             except Exception:
-                pass  # 重新下载
+                # print(f"Video {video_id} 已存在，跳过下载")
+                return full_path
 
         for attempt in range(max_retries):
             try:

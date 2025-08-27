@@ -11,6 +11,7 @@ from astrbot.api.message_components import File, Plain
 
 from .core.api_client import ApiClient
 import zipfile
+import subprocess
 # import pyminizip
 
 @register(
@@ -40,7 +41,7 @@ class WaterFeetIwaraPlugin(Star):
         saved_path = client.download_video2(path=self.Iwara_savepath, video_id=video_id)
         if not saved_path or not os.path.isfile(saved_path):
             raise RuntimeError("下载失败或文件不存在")
-        zip_path = self._pack_to_zip(saved_path)
+        zip_path = self.encrypt_zip_7z(saved_path, "iwara")
         # os.remove(saved_path)          # 清理原文件
         return zip_path
 
@@ -68,6 +69,14 @@ class WaterFeetIwaraPlugin(Star):
     #     # 参数：文件路径、压缩文件名、密码、压缩级别（1-9）
     #     pyminizip.compress(src_path, None, zip_path, password, 5)
     #     return zip_path
+
+    def encrypt_zip_7z(self, src_path: str, password: str) -> str:
+        zip_path = os.path.splitext(src_path)[0] + ".zip"
+        subprocess.run([
+            "7z", "a", "-tzip", zip_path, src_path,
+            f"-p{password}", "-mem=AES256", "-y"
+        ], check=True)
+        return zip_path
 
     # -------------------------------------------------
     # 指令入口：iwara <video_id>
