@@ -11,7 +11,7 @@ from astrbot.api.message_components import File, Plain
 
 from .core.api_client import ApiClient
 import zipfile
-import pyminizip
+# import pyminizip
 
 @register(
     "astrbot_plugin_mmdDownload",
@@ -40,7 +40,7 @@ class WaterFeetIwaraPlugin(Star):
         saved_path = client.download_video2(path=self.Iwara_savepath, video_id=video_id)
         if not saved_path or not os.path.isfile(saved_path):
             raise RuntimeError("下载失败或文件不存在")
-        zip_path = self._pack_to_zip_encrypted(saved_path, "iwara")
+        zip_path = self._pack_to_zip(saved_path)
         # os.remove(saved_path)          # 清理原文件
         return zip_path
 
@@ -56,18 +56,18 @@ class WaterFeetIwaraPlugin(Star):
         with zipfile.ZipFile(zip_path, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
             zf.write(src_path, arcname=os.path.basename(src_path))
         return zip_path
-    @staticmethod
-    def _pack_to_zip_encrypted(src_path: str, password: str) -> str:
-        src_path = os.path.abspath(src_path)
-        if not os.path.isfile(src_path):
-            raise FileNotFoundError(src_path)
+    # @staticmethod
+    # def _pack_to_zip_encrypted(src_path: str, password: str) -> str:
+    #     src_path = os.path.abspath(src_path)
+    #     if not os.path.isfile(src_path):
+    #         raise FileNotFoundError(src_path)
 
-        zip_path = os.path.splitext(src_path)[0] + ".zip"
-        arcname = os.path.basename(src_path)
+    #     zip_path = os.path.splitext(src_path)[0] + ".zip"
+    #     arcname = os.path.basename(src_path)
 
-        # 参数：文件路径、压缩文件名、密码、压缩级别（1-9）
-        pyminizip.compress(src_path, None, zip_path, password, 5)
-        return zip_path
+    #     # 参数：文件路径、压缩文件名、密码、压缩级别（1-9）
+    #     pyminizip.compress(src_path, None, zip_path, password, 5)
+    #     return zip_path
 
     # -------------------------------------------------
     # 指令入口：iwara <video_id>
