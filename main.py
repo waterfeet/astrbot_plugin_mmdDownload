@@ -232,5 +232,6 @@ class WaterFeetIwaraPlugin(Star):
             "   iwarathumb <video_id>\n"
             "   例：iwarathumb JxhNoTWKaoZzAV\n"
             "\n"
+            "本插件会调用7z进行加密压缩，解压密码是iwara"
         )
         yield event.plain_result(help_text)
